@@ -1,3 +1,4 @@
+import 'package:expenses/components/transaction_Form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           TransactionList(_transactions),
+          TransactionForm(),
         ],
       ),
     );
