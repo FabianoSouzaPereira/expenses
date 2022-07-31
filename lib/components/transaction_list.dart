@@ -12,11 +12,11 @@ class TransactionList extends StatelessWidget {
     return Container(
       height: 300,
       child: ListView.builder(
-          itemCount: transactions.length,
-          itemBuilder: (ctx, index) {
-            final tr = transactions[index];
-            return Card(
-                child: Row(
+        itemCount: transactions.length,
+        itemBuilder: (ctx, index) {
+          final tr = transactions[index];
+          return Card(
+            child: Row(
               children: [
                 Container(
                   margin: const EdgeInsets.symmetric(
@@ -24,17 +24,20 @@ class TransactionList extends StatelessWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.purple,
-                    width: 2,
-                  )),
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor,
+                      width: 2,
+                    ),
+                  ),
                   padding: const EdgeInsets.all(10),
-                  child: Text('R\$ ${tr.value.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.purple,
-                      )),
+                  child: Text(
+                    'R\$ ${tr.value.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,8 +58,10 @@ class TransactionList extends StatelessWidget {
                   ],
                 )
               ],
-            ));
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 }
