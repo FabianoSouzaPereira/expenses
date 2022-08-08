@@ -6,6 +6,7 @@ import 'chart_bar.dart';
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransaction;
 
+  // ignore: use_key_in_widget_constructors
   const Chart(this.recentTransaction);
 
   List<Map<String, Object>> get groupedtransations {
@@ -44,7 +45,7 @@ class Chart extends StatelessWidget {
             return ChartBar(
               label: tr['day'].toString(),
               value: double.parse(tr['value'].toString()).toDouble(),
-              percentage: 0.0,
+              percentage: 0.6,
             );
           }).toList(),
         ));
