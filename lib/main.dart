@@ -1,68 +1,59 @@
-import 'package:expenses/components/chart.dart';
-import 'package:expenses/components/transaction_Form.dart';
+import 'package:expenses/components/transaction_form.dart';
 import 'package:flutter/material.dart';
-import 'components/transaction_List.dart';
-import 'components/transaction_Form.dart';
-import 'models/transaction.dart';
 import 'dart:math';
+import 'components/transaction_form.dart';
+import 'components/transaction_list.dart';
+import 'components/chart.dart';
+import 'models/transaction.dart';
 
-main() => runApp(const ExpensesApp());
+main() => runApp(ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
-  const ExpensesApp({Key? key}) : super(key: key);
+  ExpensesApp({Key? key}) : super(key: key);
+  final ThemeData tema = ThemeData();
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData tema = ThemeData();
-
     return MaterialApp(
-        home: MyHomePage(),
-        theme: tema.copyWith(
-          colorScheme: tema.colorScheme.copyWith(
-            primary: Colors.purple,
-            secondary: Colors.amber,
+      home: const MyHomePage(),
+      theme: tema.copyWith(
+        colorScheme: tema.colorScheme.copyWith(
+          primary: Colors.purple,
+          secondary: Colors.amber,
+        ),
+        textTheme: tema.textTheme.copyWith(
+          headline6: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          textTheme: tema.textTheme.copyWith(
-            headline6: const TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+          button: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          appBarTheme: const AppBarTheme(
-            titleTextStyle: TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+        ),
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  // MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: 't0',
-      title: 'Novo tenis da nike',
-      value: 50.10,
-      date: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    Transaction(
-      id: 't1',
-      title: 'Conta de luz',
-      value: 60.01,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -72,12 +63,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -87,10 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
+  _removeTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
+  }
+
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) {
+      builder: (_) {
         return TransactionForm(_addTransaction);
       },
     );
@@ -101,19 +98,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Despesas Pessoais'),
-        actions: <Widget>[
+        actions: [
           IconButton(
-            onPressed: () => _openTransactionFormModal(context),
             icon: const Icon(Icons.add),
-          )
+            onPressed: () => _openTransactionFormModal(context),
+          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             Chart(_recentTransactions),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _removeTransaction),
           ],
         ),
       ),
