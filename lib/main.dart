@@ -2,15 +2,25 @@ import 'dart:math';
 import 'dart:io';
 
 import 'package:expenses/components/transaction_form.dart';
+import 'package:expenses/core/utils/consts.dart';
+import 'package:expenses/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
 
-import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'components/chart.dart';
-import 'models/transaction.dart';
+import 'domain/transaction.dart';
 
-main() => runApp(ExpensesApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
+  FlavorConfig(variables: {
+    Consts.appName: "Expenses",
+  });
+
+  runApp(ExpensesApp());
+}
 
 class ExpensesApp extends StatelessWidget {
   ExpensesApp({Key? key}) : super(key: key);
@@ -45,6 +55,8 @@ class ExpensesApp extends StatelessWidget {
           ),
         ),
       ),
+      title: FlavorConfig.instance.variables[Consts.appName],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
     );
   }
 }
